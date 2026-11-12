@@ -278,6 +278,12 @@
             gap: 18px;
             border-top: 10px dashed #fdfbf7;
             border-bottom: 10px dashed #fdfbf7;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Hide scrollbar for clean look */
+        }
+
+        .film-strip::-webkit-scrollbar {
+            display: none;
         }
 
         .film-frame {
@@ -393,7 +399,7 @@
                         If I could put all our memories from this year into a box, it would mostly be blurry pictures, 2 AM overthinking, and laughing at things that aren't even funny.<br><br>
                         Thanks for being my favorite unpaid therapist and partner-in-crime. Now stop reading and go arrange my birthday treat! 🍕💸
                     </p>
-                    <div class="cassette-badge">▶ SIDE A: CHAOS & MEMORIES.MP3</div>
+                    <div class="cassette-badge">▶ NOW PLAYING: LINE WITHOUT A HOOK.MP3</div>
                 </div>
                 <div class="stamp-photo">
                     <div class="polaroid" style="transform: rotate(-3deg);">
@@ -408,7 +414,7 @@
         <!-- Part 3: Film Strip Gallery -->
         <div class="section-box">
             <h2 class="film-section-title">Caught in 4K (Evidence Archive) 🎞️</h2>
-            <div class="film-strip">
+            <div class="film-strip" id="filmStrip">
                 <div class="film-frame">
                     <img src="Screenshot 2026-11-12 233725.png" alt="Evidence 1">
                     <div class="film-caption">Exhibit A: Normal? Never.</div>
@@ -434,17 +440,25 @@
 
     </div>
 
-    <!-- Optional Background Music (Add your mp3 filename in src if you upload one) -->
+    <!-- Background Music -->
     <audio id="bg-music" loop>
-        <source src="music.mp3" type="audio/mpeg">
+        <source src="Ricky_Montgomery_-_Line_Without_a_Hook_(mp3.pm).mp3" type="audio/mpeg">
     </audio>
-    <button class="music-btn" id="music-toggle" onclick="toggleMusic()" style="display: none;">🎵 Play Vibe</button>
+    <button class="music-btn" id="music-toggle" onclick="toggleMusic()" style="display: none;">⏸ Pause Vibe</button>
 
     <script>
         function openScrapbook() {
             const intro = document.getElementById('intro-stage');
             const main = document.getElementById('scrapbook-main');
             const musicBtn = document.getElementById('music-toggle');
+            const audio = document.getElementById('bg-music');
+
+            // Auto-play music when envelope is clicked
+            audio.play().then(() => {
+                musicBtn.innerText = '⏸ Pause Vibe';
+            }).catch(() => {
+                musicBtn.innerText = '🎵 Play Vibe';
+            });
 
             intro.style.opacity = '0';
             intro.style.transform = 'scale(0.9)';
@@ -453,6 +467,7 @@
                 intro.style.display = 'none';
                 main.style.display = 'block';
                 musicBtn.style.display = 'block';
+                startAutoScroll(); // Start auto scrolling film strip
             }, 500);
         }
 
@@ -460,15 +475,28 @@
             const audio = document.getElementById('bg-music');
             const btn = document.getElementById('music-toggle');
             if (audio.paused) {
-                audio.play().then(() => {
-                    btn.innerText = '⏸ Pause Vibe';
-                }).catch(() => {
-                    alert('রিপোজিটরিতে music.mp3 নামে কোনো গান আপলোড করলে এখানে মিউজিক বাজবে!');
-                });
+                audio.play();
+                btn.innerText = '⏸ Pause Vibe';
             } else {
                 audio.pause();
                 btn.innerText = '🎵 Play Vibe';
             }
+        }
+
+        // Auto Scroll Film Strip Logic
+        function startAutoScroll() {
+            const filmStrip = document.getElementById('filmStrip');
+            let scrollSpeed = 1; // Speed of scrolling
+            
+            setInterval(() => {
+                if (filmStrip) {
+                    filmStrip.scrollLeft += scrollSpeed;
+                    // If it reaches the end, smoothly loop back to start
+                    if (filmStrip.scrollLeft >= (filmStrip.scrollWidth - filmStrip.clientWidth)) {
+                        filmStrip.scrollLeft = 0;
+                    }
+                }
+            }, 30); // Adjust interval for smoothness
         }
     </script>
 </body>
