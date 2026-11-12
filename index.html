@@ -131,6 +131,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
 
         /* Section 1: Ring Binder Notebook */
@@ -258,7 +259,7 @@
             border: 2px solid #999;
         }
 
-        /* Section 3: Vintage Film Strip */
+        /* Section 3: Seamless Infinite Loop Film Strip */
         .film-section-title {
             font-family: 'Playfair Display', serif;
             font-style: italic;
@@ -267,27 +268,42 @@
             text-align: center;
         }
 
-        .film-strip {
+        .film-strip-wrapper {
             background: #141414;
-            padding: 22px 15px;
+            padding: 22px 0;
             border-radius: 6px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             width: 100%;
-            overflow-x: auto;
-            display: flex;
-            gap: 18px;
+            overflow: hidden;
             border-top: 10px dashed #fdfbf7;
             border-bottom: 10px dashed #fdfbf7;
-            scroll-behavior: smooth;
-            scrollbar-width: none; /* Hide scrollbar for clean look */
+            position: relative;
         }
 
-        .film-strip::-webkit-scrollbar {
-            display: none;
+        .film-track {
+            display: flex;
+            gap: 18px;
+            width: max-content;
+            animation: infiniteReel 22s linear infinite;
+        }
+
+        .film-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes infiniteReel {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                /* 5 frames * (200px width + 18px gap) = 1090px */
+                transform: translateX(-1090px);
+            }
         }
 
         .film-frame {
             flex: 0 0 200px;
+            width: 200px;
             background: #000;
             padding: 6px;
             border: 1px solid #333;
@@ -295,7 +311,7 @@
         }
 
         .film-frame:hover {
-            transform: scale(1.06);
+            transform: scale(1.05);
         }
 
         .film-frame img {
@@ -411,29 +427,54 @@
             </div>
         </div>
 
-        <!-- Part 3: Film Strip Gallery -->
+        <!-- Part 3: Seamless Infinite Film Strip Gallery -->
         <div class="section-box">
             <h2 class="film-section-title">Caught in 4K (Evidence Archive) 🎞️</h2>
-            <div class="film-strip" id="filmStrip">
-                <div class="film-frame">
-                    <img src="Screenshot 2026-11-12 233725.png" alt="Evidence 1">
-                    <div class="film-caption">Exhibit A: Normal? Never.</div>
-                </div>
-                <div class="film-frame">
-                    <img src="Screenshot 2026-11-12 233734.png" alt="Evidence 2">
-                    <div class="film-caption">Exhibit B: Top tier icon</div>
-                </div>
-                <div class="film-frame">
-                    <img src="Screenshot 2026-11-12 233743.png" alt="Evidence 3">
-                    <div class="film-caption">Exhibit C: Pure drama</div>
-                </div>
-                <div class="film-frame">
-                    <img src="Screenshot 2026-11-12 233753.png" alt="Evidence 4">
-                    <div class="film-caption">Exhibit D: Iconic moment</div>
-                </div>
-                <div class="film-frame">
-                    <img src="Screenshot 2026-11-12 233806.png" alt="Evidence 5">
-                    <div class="film-caption">Exhibit E: Legend status</div>
+            <div class="film-strip-wrapper">
+                <div class="film-track">
+                    <!-- Original 5 Frames -->
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233725.png" alt="Evidence 1">
+                        <div class="film-caption">Exhibit A: Normal? Never.</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233734.png" alt="Evidence 2">
+                        <div class="film-caption">Exhibit B: Top tier icon</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233743.png" alt="Evidence 3">
+                        <div class="film-caption">Exhibit C: Pure drama</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233753.png" alt="Evidence 4">
+                        <div class="film-caption">Exhibit D: Iconic moment</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233806.png" alt="Evidence 5">
+                        <div class="film-caption">Exhibit E: Legend status</div>
+                    </div>
+
+                    <!-- Duplicated 5 Frames for Seamless Infinite Loop -->
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233725.png" alt="Evidence 1">
+                        <div class="film-caption">Exhibit A: Normal? Never.</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233734.png" alt="Evidence 2">
+                        <div class="film-caption">Exhibit B: Top tier icon</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233743.png" alt="Evidence 3">
+                        <div class="film-caption">Exhibit C: Pure drama</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233753.png" alt="Evidence 4">
+                        <div class="film-caption">Exhibit D: Iconic moment</div>
+                    </div>
+                    <div class="film-frame">
+                        <img src="Screenshot 2026-11-12 233806.png" alt="Evidence 5">
+                        <div class="film-caption">Exhibit E: Legend status</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -453,7 +494,6 @@
             const musicBtn = document.getElementById('music-toggle');
             const audio = document.getElementById('bg-music');
 
-            // Auto-play music when envelope is clicked
             audio.play().then(() => {
                 musicBtn.innerText = '⏸ Pause Vibe';
             }).catch(() => {
@@ -467,7 +507,6 @@
                 intro.style.display = 'none';
                 main.style.display = 'block';
                 musicBtn.style.display = 'block';
-                startAutoScroll(); // Start auto scrolling film strip
             }, 500);
         }
 
@@ -481,22 +520,6 @@
                 audio.pause();
                 btn.innerText = '🎵 Play Vibe';
             }
-        }
-
-        // Auto Scroll Film Strip Logic
-        function startAutoScroll() {
-            const filmStrip = document.getElementById('filmStrip');
-            let scrollSpeed = 1; // Speed of scrolling
-            
-            setInterval(() => {
-                if (filmStrip) {
-                    filmStrip.scrollLeft += scrollSpeed;
-                    // If it reaches the end, smoothly loop back to start
-                    if (filmStrip.scrollLeft >= (filmStrip.scrollWidth - filmStrip.clientWidth)) {
-                        filmStrip.scrollLeft = 0;
-                    }
-                }
-            }, 30); // Adjust interval for smoothness
         }
     </script>
 </body>
